@@ -26,6 +26,9 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const props = defineProps({
   currentAvatar: {
@@ -49,10 +52,35 @@ const handleFileChange = (event) => {
   }
 };
 
-const saveAvatar = () => {
+const saveAvatar = async () => {
   if (previewImage.value) {
-    emit('save', previewImage.value);
-    emit('close');
+    try {
+      const userId = localStorage.getItem('userId');
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch(`http://localhost:5000/api/avatarchange/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          avatar: previewImage.value  // base64格式的图片数据
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('头像更新失败');
+      }
+
+      emit('save', previewImage.value);
+      emit('close');
+      
+      await router.push('/personal');
+      window.location.reload();
+    } catch (error) {
+      console.error('更新头像时出错:', error);
+    }
   }
 };
 </script>

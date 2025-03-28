@@ -117,7 +117,6 @@
 <script>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
-import { jwtDecode } from 'jwt-decode';
 import { Home, Microphone, Setting, User, SwitchButton } from '@element-plus/icons-vue';
 
 export default {

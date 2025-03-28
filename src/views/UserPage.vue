@@ -1,9 +1,8 @@
 <template>
-  <Header />
-  <div class="content-container">
+  <div class="home">
     <!-- 用户资料展示部分 -->
-    <div class="user-profile">
-      <div class="profile-banner">
+
+      <section class="profile-banner">
         <div class="avatar-container">
           <img :src="user.avatar" alt="用户头像" class="avatar" />
           <div class="avatar-hover">
@@ -21,7 +20,7 @@
           </svg>
           {{ editMode ? '取消' : '编辑' }}
         </button>
-      </div>
+      </section>
       
       <!-- 编辑内容部分 -->
       <div class="edit-section" v-if="editMode">
@@ -33,7 +32,7 @@
       </div>
 
       <!-- 详细信息部分 -->
-      <div class="profile-details" v-else>
+      <section class="profile-details">
         <div class="detail-card">
           <h3 class="detail-title">基本信息</h3>
           <div class="detail-list">
@@ -64,22 +63,20 @@
           <h3 class="detail-title">个人简介</h3>
           <p class="bio-content">{{ user.bio }}</p>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <!-- 编辑头像模态框 -->
-    <EditAvatar
-      v-if="showAvatarModal"
-      :current-avatar="user.avatar"
-      @save="updateAvatar"
-      @close="showAvatarModal = false"
-    />
+      <!-- 编辑头像模态框 -->
+      <EditAvatar
+        v-if="showAvatarModal"
+        :current-avatar="user.avatar"
+        @save="updateAvatar"
+        @close="showAvatarModal = false"
+      />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import Header from "@/components/Header.vue";
 import EditAvatar from "@/components/EditAvatar.vue";
 import EditContent from "@/components/EditContent.vue";
 
@@ -158,18 +155,16 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.user-page {
-  min-height: 100vh;
-  width: 100%;
-  background-color: #f8fafc;
-  padding: 0;
-}
+html, body {
+  overflow-y: auto;
+  height: 100%;
+} 
+.home {
+  max-width: 2000px;
+  margin: 0 auto;
+  overflow-y: auto;
+  height: 100%;
 
-.user-profile {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
 }
 
 .profile-banner {
@@ -305,16 +300,17 @@ onMounted(() => {
 }
 
 .profile-details {
-  padding: 80px 40px 40px;
-  margin-right: 100px;
+  padding: 40px 40px 40px;
   max-width: 500px;
+  min-height: 1000px;
 }
 
 .detail-card {
-  background: white;
+  background: rgb(255, 255, 255);
   border-radius: 12px;
   padding: 24px;
   margin-bottom: 24px;
+  overflow-y: auto;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
 }
 
@@ -375,81 +371,4 @@ onMounted(() => {
   white-space: pre-line;
 }
 
-@media (max-width: 1024px) {
-  .profile-banner {
-    height: 240px;
-    padding: 30px;
-  }
-  
-  .avatar-container {
-    width: 140px;
-    height: 140px;
-    margin-bottom: -70px;
-  }
-  
-  .profile-details {
-    padding: 70px 30px 30px;
-  }
-}
-
-@media (max-width: 768px) {
-  .content-container {
-    padding: 0;
-  }
-  
-  .user-profile {
-    border-radius: 0;
-  }
-  
-  .profile-banner {
-    height: auto;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 100px 20px 60px;
-  }
-  
-  .avatar-container {
-    margin-bottom: -80px;
-    transform: translateY(-80px);
-  }
-  
-  .banner-info {
-    text-align: center;
-    margin-top: 40px;
-  }
-  
-  .edit-button {
-    top: 20px;
-    right: 20px;
-  }
-  
-  .profile-details {
-    padding: 60px 20px 20px;
-  }
-  
-  .detail-list {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .user-name {
-    font-size: 28px;
-  }
-  
-  .edit-button {
-    padding: 8px 12px;
-    font-size: 14px;
-  }
-}
-
-/* 新增编辑区域样式 */
-.edit-section {
-  padding: 20px;
-  background: #f8fafc;
-  border-radius: 8px;
-  margin: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
 </style>

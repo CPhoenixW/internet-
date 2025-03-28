@@ -4,16 +4,12 @@
       <h2>编辑个人资料</h2>
       <form @submit.prevent="saveChanges">
         <div class="form-group">
-          <label>姓名</label>
+          <label>昵称</label>
           <input type="text" v-model="formData.name" required />
         </div>
         <div class="form-group">
           <label>邮箱</label>
           <input type="email" v-model="formData.email" />
-        </div>
-        <div class="form-group">
-          <label>微信账号</label>
-          <input type="text" v-model="formData.wechat" />
         </div>
         <div class="form-group">
           <label>手机号</label>
@@ -46,6 +42,9 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const props = defineProps({
   user: {
@@ -74,9 +73,40 @@ watch(props, (newProps) => {
   };
 });
 
-const saveChanges = () => {
-  emit('save', formData.value);
-  emit('close');
+const saveChanges = async () => {
+  try {
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+    
+    const response = await fetch(`http://localhost:5000/api/infochange/${userId}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: formData.value.name,
+        email: formData.value.email,
+        phone: formData.value.phone,
+        birthday: formData.value.birthday,
+        location: formData.value.location,
+        signature: formData.value.signature,
+        bio: formData.value.bio
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('个人信息更新失败');
+    }
+
+    emit('save', formData.value);
+    emit('close');
+    
+    await router.push('/personal');
+    window.location.reload();
+  } catch (error) {
+    console.error('更新个人信息时出错:', error);
+  }
 };
 </script>
 
