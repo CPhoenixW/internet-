@@ -78,11 +78,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Header from "@/components/Header.vue";
 import EditAvatar from "@/components/EditAvatar.vue";
 import EditContent from "@/components/EditContent.vue";
 
+// mockUser 作为初始值和 fallback
 const mockUser = {
   id: "10086",
   name: "- Phoenix Wang -",
@@ -98,18 +99,62 @@ const mockUser = {
   signature: "代码写出来是给人看的，附带能在机器上运行"
 };
 
-const user = ref(mockUser);
+// 使用 ref 初始化 user 为 mockUser
+const user = ref({ ...mockUser });
 const editMode = ref(false);
 const showAvatarModal = ref(false);
 
+// 获取用户信息的方法
+const fetchUserInfo = async () => {
+  try {
+    // 从 LocalStorage 获取 id 和 token
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+
+    // 如果没有 id 或 token，直接使用 mockUser，不发起请求
+    if (!userId || !token) {
+      console.warn('未找到 userId 或 token，使用 mockUser 数据');
+      return;
+    }
+
+    // 发起 API 请求
+    const response = await fetch(`http://localhost:5000/api/userinfo/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`, // 将 token 添加到请求头
+        'Content-Type': 'application/json'
+      }
+    });
+
+    // 检查响应是否成功
+    if (!response.ok) {
+      throw new Error('请求用户信息失败');
+    }
+
+    // 解析返回的数据并更新 user
+    const data = await response.json();
+    user.value = data; // 假设返回的数据格式与 mockUser 一致
+  } catch (error) {
+    console.error('获取用户信息失败，使用 mockUser 数据:', error);
+    user.value = { ...mockUser }; // 请求失败时回退到 mockUser
+  }
+};
+
+// 更新用户信息
 const updateUser = (updatedUser) => {
   user.value = updatedUser;
   editMode.value = false;
 };
 
+// 更新头像
 const updateAvatar = (newAvatar) => {
   user.value.avatar = newAvatar;
 };
+
+// 组件挂载时获取用户信息
+onMounted(() => {
+  fetchUserInfo();
+});
 </script>
 
 <style scoped>
@@ -147,18 +192,13 @@ const updateAvatar = (newAvatar) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.1) 100%);
   z-index: 1;
 }
 
-.avatar-container {
+.avatar-container, .banner-info {
   position: relative;
   z-index: 2;
-}
-
-.banner-info {
-  margin-left: -1200px;
-  z-index: 1;
 }
 
 .avatar-container {

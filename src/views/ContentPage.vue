@@ -146,13 +146,7 @@ export default {
       if (!token) {
         router.push("/login"); // 没有 Token，跳转到登录页
       } else {
-        try {
-          const decoded = jwtDecode(token); // 解析 Token 获取用户名
-          user.value.username = decoded.username || "用户";
-        } catch (error) {
-          console.error("Token 解析失败", error);
-          router.push("/login");
-        }
+        user.value.username
       }
 
       // 绑定鼠标事件

@@ -61,6 +61,8 @@ export default {
                 if (response.data.success) {
                     console.log(response.data.token);
                     localStorage.setItem("token", response.data.token); // ✅ 存储 JWT Token
+                    localStorage.setItem("ID",response.data.userID);
+                    localStorage.setItem("username",response.value.username);
                     this.$router.push("/content"); // ✅ 跳转到语音生成页面
                 } else {
                     this.errorMessage = response.data.message; // 显示错误信息
