@@ -26,7 +26,11 @@
                 </div>
               </div>
               <div class="action-buttons">
-                <button class="action-btn" @click="handleLike(item)">
+                <button 
+                  class="action-btn" 
+                  @click="handleLike(item)"
+                  :class="{ 'liked': item.isLiked }"
+                >
                   <span class="icon">👍</span>
                   <span class="count">{{ item.likes }}</span>
                 </button>
@@ -198,27 +202,40 @@
           const userId = localStorage.getItem('userID');
           const token = localStorage.getItem('token');
           
-          // 获取用户的收藏列表
-          const response = await axios.get(
-            `http://localhost:5000/api/users/${userId}/favorites`,
-            {
-              headers: {
-                'Authorization': `Bearer ${token}`
+          // 获取用户的收藏列表和点赞列表
+          const [favoritesResponse, likesResponse] = await Promise.all([
+            axios.get(
+              `http://localhost:5000/api/users/${userId}/favorites`,
+              {
+                headers: {
+                  'Authorization': `Bearer ${token}`
+                }
               }
-            }
-          );
+            ),
+            axios.get(
+              `http://localhost:5000/api/users/${userId}/likes`,
+              {
+                headers: {
+                  'Authorization': `Bearer ${token}`
+                }
+              }
+            )
+          ]);
 
-          const favoriteIds = response.data.favorites || [];
+          const favoriteIds = favoritesResponse.data.favorites || [];
+          const likedIds = likesResponse.data.likes || [];
 
           return items.map(item => ({
             ...item,
-            isFavorited: favoriteIds.includes(item.id)
+            isFavorited: favoriteIds.includes(item.id),
+            isLiked: likedIds.includes(item.id)
           }));
         } catch (error) {
-          console.error('获取收藏状态失败:', error);
+          console.error('获取状态失败:', error);
           return items.map(item => ({
             ...item,
-            isFavorited: false
+            isFavorited: false,
+            isLiked: false
           }));
         }
       },
@@ -227,22 +244,43 @@
           const userId = localStorage.getItem('userID');
           const token = localStorage.getItem('token');
           
-          const response = await axios.post(
-            `http://localhost:5000/api/posts/${item.id}/like`,
-            { userId },
-            {
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+          if (!item.isLiked) {
+            // 添加点赞
+            const response = await axios.post(
+              `http://localhost:5000/api/posts/${item.id}/like`,
+              { userId },
+              {
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json'
+                }
               }
-            }
-          );
+            );
 
-          if (response.data.success) {
-            item.likes++;
+            if (response.data.success) {
+              item.likes++;
+              item.isLiked = true;
+            }
+          } else {
+            // 取消点赞
+            const response = await axios.delete(
+              `http://localhost:5000/api/posts/${item.id}/like`,
+              {
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json'
+                },
+                data: { userId }
+              }
+            );
+
+            if (response.data.success) {
+              item.likes--;
+              item.isLiked = false;
+            }
           }
         } catch (error) {
-          console.error('点赞失败:', error);
+          console.error('点赞操作失败:', error);
         }
       },
       goToComments(item) {
@@ -459,5 +497,11 @@
   
   .title:hover {
     color: #6366f1;
+  }
+  
+  .action-btn.liked {
+    background: #ff4757;
+    color: white;
+    border-color: #ff4757;
   }
 </style>
