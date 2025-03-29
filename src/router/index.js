@@ -4,6 +4,7 @@ import LoginPage from '../views/LoginPage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
 import ContentPage from '../views/ContentPage.vue'
 import UserPage from '../views/UserPage.vue'
+import Community from '../views/Community.vue'
 
 
 const routes = [
@@ -12,6 +13,7 @@ const routes = [
   { path: '/register', component: RegisterPage },
   { path: '/content', component: ContentPage },
   { path: '/personal', component: UserPage },
+  { path: '/community', component: Community },
 ]
 
 const router = createRouter({
