@@ -44,7 +44,7 @@ export default {
       currentCategory: 'video',
       categories: [
         { type: 'video', name: '视频' },
-        { type: 'course', name: '课程' },
+        { type: 'ppt', name: '课件' },
         { type: 'live', name: '直播' }
       ]
     };

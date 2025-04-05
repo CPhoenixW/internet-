@@ -80,54 +80,54 @@ const mockCourses = {
       url: "http://localhost:8080/video/6"
     }
   ],
-  course: [
+  ppt: [
     {
       id: 101,
-      type: 'course',
+      type: 'ppt',
       title: "昆曲表演系统课程【初级班】",
       author: "张三",
       image: "http://localhost:8080/img/cover1.jpg",
-      url: "http://localhost:8080/course/101"
+      url: "http://localhost:8080/ppt/101"
     },
     {
       id: 102,
-      type: 'course',
+      type: 'ppt',
       title: "昆曲表演系统课程【中级班】",
       author: "李四",
       image: "http://localhost:8080/img/cover1.jpg",
-      url: "http://localhost:8080/course/102"
+      url: "http://localhost:8080/ppt/102"
     },
     {
       id: 103,
-      type: 'course',
+      type: 'ppt',
       title: "昆曲表演系统课程【高级班】",
       author: "王五",
       image: "http://localhost:8080/img/cover1.jpg",
-      url: "http://localhost:8080/course/103"
+      url: "http://localhost:8080/ppt/103"
     },
     {
       id: 104,
-      type: 'course',
+      type: 'ppt',
       title: "昆曲唱腔进阶课程",
       author: "赵六",
       image: "http://localhost:8080/img/cover1.jpg",
-      url: "http://localhost:8080/course/104"
+      url: "http://localhost:8080/ppt/104"
     },
     {
       id: 105,
-      type: 'course',
+      type: 'ppt',
       title: "昆曲身段提升班",
       author: "孙七",
       image: "http://localhost:8080/img/cover1.jpg",
-      url: "http://localhost:8080/course/105"
+      url: "http://localhost:8080/ppt/105"
     },
     {
       id: 106,
-      type: 'course',
+      type: 'ppt',
       title: "昆曲表演艺术大师班",
       author: "周八",
       image: "http://localhost:8080/img/cover1.jpg",
-      url: "http://localhost:8080/course/106"
+      url: "http://localhost:8080/ppt/106"
     }
   ],
   live: [
@@ -202,7 +202,7 @@ export default {
     categoryTitle() {
       const titles = {
         video: '视频',
-        course: '课程',
+        course: '课件',
         live: '直播'
       };
       return titles[this.category];

@@ -30,6 +30,11 @@ const routes = [
     name: 'LiveReplay',
     component: () => import('@/views/Live.vue')
   },
+  {
+    path: '/ppt/:id',
+    name: 'PPT',
+    component: () => import('@/views/PPT.vue')
+  },
 ]
 
 const router = createRouter({
