@@ -1,7 +1,7 @@
 <template>
+  <Header />
   <div class="home">
     <!-- 用户资料展示部分 -->
-
       <section class="profile-banner">
         <div class="avatar-container">
           <img :src="user.avatar" alt="用户头像" class="avatar" />
@@ -79,6 +79,7 @@
 import { ref, onMounted } from 'vue';
 import EditAvatar from "@/components/EditAvatar.vue";
 import EditContent from "@/components/EditContent.vue";
+import Header from "@/components/Header.vue";
 
 // mockUser 作为初始值和 fallback
 const mockUser = {
@@ -163,11 +164,11 @@ html, body {
   max-width: 2000px;
   margin: 0 auto;
   overflow-y: auto;
-  height: 100%;
-
+  height: 100vh;
 }
 
 .profile-banner {
+  top: 50px;
   height: 200px;
   background-image: url('@/assets/cover6.jpg');
   background-size: cover;

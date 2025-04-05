@@ -5,7 +5,7 @@ import RegisterPage from '../views/RegisterPage.vue'
 import ContentPage from '../views/ContentPage.vue'
 import UserPage from '../views/UserPage.vue'
 import Community from '../views/Community.vue'
-
+import Course from '../views/Course.vue'
 
 const routes = [
   { path: '/', component: LandingPage },
@@ -14,6 +14,22 @@ const routes = [
   { path: '/content', component: ContentPage },
   { path: '/personal', component: UserPage },
   { path: '/community', component: Community },
+  { path: '/course', component: Course },
+  {
+    path: '/video/:id',
+    name: 'Video',
+    component: () => import('@/views/Video.vue')
+  },
+  {
+    path: '/live/:id',
+    name: 'Live',
+    component: () => import('@/views/Live.vue')
+  },
+  {
+    path: '/live/:id/replay',
+    name: 'LiveReplay',
+    component: () => import('@/views/Live.vue')
+  },
 ]
 
 const router = createRouter({

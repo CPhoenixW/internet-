@@ -3,7 +3,7 @@
     <input
       type="text"
       v-model="keyword"
-      placeholder="搜索社区内容..."
+      placeholder="搜索内容..."
       @keyup.enter="triggerSearch"
     />
     <button @click="triggerSearch">
